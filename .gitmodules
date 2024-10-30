@@ -1,0 +1,3 @@
+[submodule "monolisa-nerdfont-patch"]
+	path = monolisa-nerdfont-patch
+	url = https://github.com/daylinmorgan/monolisa-nerdfont-patch

@@ -1,0 +1,9 @@
+#!/bin/bash
+
+mkdir -p freezed
+
+find . -name '*.ttf' -print0 | while IFS= read -r -d $'\0' file; do
+  out="freezed/$(basename "${file%.*}")-Freezed.ttf"
+  pyftfeatfreeze -f 'ss03,zero,ss10,ss11,ss12' -S -U Freezed "$file" "$out"
+done
+

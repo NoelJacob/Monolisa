@@ -1,0 +1,39 @@
+#!/bin/bash
+
+# Set directory variables
+source_dir="."
+freezed_source_dir="./freezed"
+patch_dir="./monolisa-nerdfont-patch"
+output_dir="./nerdfont"
+freezed_output_dir="./freezed nerdfont"
+
+# Function to patch and move fonts
+patch_fonts() {
+  local source="$1"
+  local output="$2"
+
+  mkdir -p "$patch_dir/MonoLisa/ttf"
+
+  # Copy source fonts
+  cp "$source"/*.ttf "$patch_dir/MonoLisa/ttf" || { echo "Copying fonts failed!"; exit 1; }
+
+  # Patch fonts
+  cd "$patch_dir" || { echo "Entering patch directory failed!"; exit 1; }
+  make || { echo "Patching fonts failed!"; exit 1; }
+  cd .. || { echo "Exiting patch directory failed!"; exit 1; }
+
+  # Create output directory and move patched fonts
+  mkdir -p "$output"
+  mv "$patch_dir/patched/ttf"/* "$output" || { echo "Moving patched fonts failed!"; exit 1; }
+
+  # Cleanup
+  rm -rf "$patch_dir/MonoLisa/ttf"
+}
+
+# Patch regular fonts
+patch_fonts "$source_dir" "$output_dir"
+
+# Patch freezed fonts
+patch_fonts "$freezed_source_dir" "$freezed_output_dir"
+
+echo "Font patching complete!"
